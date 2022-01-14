@@ -2,22 +2,21 @@
 {
     public class InventoryRepository : IInventoryRepository
     {
-        private List<InventoryItem> InventoryItems = new List<InventoryItem>();
-        private int _nextId = 1;
+        private InventoryContext context;
 
-        public InventoryRepository()
+        public InventoryRepository(InventoryContext context)
         {
-            Add(new InventoryItem { Manufacturer = "testMan", Model = "Alpha", Location = "Room 303", SerialNumber = "123" });
+            this.context = context;
         }
 
         public IEnumerable<InventoryItem> GetAll()
         {
-            return InventoryItems;
+            return context.InventoryItems.ToList();
         }
 
         public InventoryItem Get(int id)
         {
-            return InventoryItems.Find(p => p.Id == id);
+            return context.InventoryItems.Find(id);
         }
 
         public InventoryItem Add(InventoryItem item)
@@ -26,14 +25,17 @@
             {
                 throw new ArgumentNullException("item");
             }
-            item.Id = _nextId++;
-            InventoryItems.Add(item);
+            context.InventoryItems.Add(item);
             return item;
         }
 
         public void Remove(int id)
         {
-            InventoryItems.RemoveAll(p => p.Id == id);
+            InventoryItem toRemove = context.InventoryItems.Find(id);
+            if (toRemove != null)
+            {
+                context.InventoryItems.Remove(toRemove);
+            }
         }
 
         public bool Update(InventoryItem item)
@@ -42,13 +44,8 @@
             {
                 throw new ArgumentNullException("item");
             }
-            int index = InventoryItems.FindIndex(p => p.Id == item.Id);
-            if (index == -1)
-            {
-                return false;
-            }
-            InventoryItems.RemoveAt(index);
-            InventoryItems.Add(item);
+            context.InventoryItems.Update(item);
+            context.SaveChanges();
             return true;
         }
 

@@ -1,18 +1,18 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using InventoryTracker.Models;
-using System.Net;
 using System.Web.Http;
+using System.Net;
 
 namespace InventoryTracker.Controllers
 {
-    public class InventoryItemsController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    public class InventoryItemsController : ControllerBase
     {
         static readonly InventoryRepository repository = new InventoryRepository();
-        public IActionResult Index()
-        {
-            return View();
-        }
-        public IEnumerable<InventoryItem> GetAllProducts()
+
+        public IEnumerable<InventoryItem> GetAll()
         {
             return repository.GetAll();
         }
@@ -44,6 +44,5 @@ namespace InventoryTracker.Controllers
 
             repository.Remove(id);
         }
-
     }
 }
