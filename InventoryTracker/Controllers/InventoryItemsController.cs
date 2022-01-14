@@ -6,7 +6,7 @@ using System.Net;
 
 namespace InventoryTracker.Controllers
 {
-    [Route("api/[controller]")]
+    [Microsoft.AspNetCore.Mvc.Route("api/[controller]")]
     [ApiController]
     public class InventoryItemsController : ControllerBase
     {
