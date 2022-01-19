@@ -11,12 +11,15 @@ builder.Services.AddScoped<IInventoryRepository, InventoryRepository>();
 builder.Services.AddDbContext<InventoryContext>(opt =>
         opt.UseSqlServer("Server=(localdb)\\MSSQLLocalDB; Initial Catalog=InventoryDB; Integrated Security=true;")
         );
+builder.Services.AddSwaggerGen();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
