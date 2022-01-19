@@ -26,6 +26,7 @@
                 throw new ArgumentNullException("item");
             }
             _context.InventoryItems.Add(item);
+            _context.SaveChanges();
             return item;
         }
 
@@ -35,6 +36,7 @@
             if (toRemove != null)
             {
                 _context.InventoryItems.Remove(toRemove);
+                _context.SaveChanges();
             }
         }
 
