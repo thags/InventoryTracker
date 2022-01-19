@@ -7,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddScoped<IInventoryRepository, InventoryRepository>();
 builder.Services.AddDbContext<InventoryContext>(opt =>
         opt.UseSqlServer("Server=(localdb)\\MSSQLLocalDB; Initial Catalog=InventoryDB; Integrated Security=true;")
         );

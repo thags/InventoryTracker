@@ -1,48 +1,60 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿#nullable disable
 using Microsoft.AspNetCore.Mvc;
 using InventoryTracker.Models;
-using System.Web.Http;
-using System.Net;
 
 namespace InventoryTracker.Controllers
 {
-    [Microsoft.AspNetCore.Mvc.Route("api/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class InventoryItemsController : ControllerBase
     {
-        static readonly InventoryRepository repository = new InventoryRepository();
 
-        public IEnumerable<InventoryItem> GetAll()
-        {
-            return repository.GetAll();
-        }
-        public InventoryItem GetProduct(int id)
-        {
-            InventoryItem item = repository.Get(id);
-            return item;
-        }
-        public InventoryItem PostItem(InventoryItem item)
-        {
-            item = repository.Add(item);
-            return item;
-        }
-        public void PutItem(int id, InventoryItem product)
-        {
-            product.Id = id;
-            if (!repository.Update(product))
-            {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
-            }
-        }
-        public void DeleteProduct(int id)
-        {
-            InventoryItem item = repository.Get(id);
-            if (item == null)
-            {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
-            }
+        private IInventoryRepository _repository;
 
-            repository.Remove(id);
+        public InventoryItemsController(IInventoryRepository repository)
+        {
+            _repository = repository;
+        }
+
+        // GET: api/InventoryItems
+        [HttpGet]
+        public IEnumerable<InventoryItem> GetEspressoItems()
+        {
+            return _repository.GetAll();
+        }
+
+        // GET: api/InventoryItems/5
+        [HttpGet("{id}")]
+        public InventoryItem GetEspressoItem(int id)
+        {
+            return _repository.Get(id);
+        }
+
+        // PUT: api/InventoryItems/5
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutEspressoItem(InventoryItem inventoryItem)
+        {
+            _repository.Update(inventoryItem);
+
+            return NoContent();
+        }
+
+        // POST: api/InventoryItems
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPost]
+        public async Task<ActionResult<InventoryItem>> PostEspressoItem(InventoryItem inventoryItem)
+        {
+            _repository.Add(inventoryItem);
+
+            return CreatedAtAction(nameof(GetEspressoItem), new { id = inventoryItem.Id }, inventoryItem);
+        }
+
+        // DELETE: api/InventoryItems/5
+        [HttpDelete("{id}")]
+        public void DeleteEspressoItem(int id)
+        {
+            _repository.Remove(id);
         }
     }
 }

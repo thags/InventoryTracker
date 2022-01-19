@@ -2,21 +2,21 @@
 {
     public class InventoryRepository : IInventoryRepository
     {
-        private InventoryContext context;
+        private InventoryContext _context;
 
         public InventoryRepository(InventoryContext context)
         {
-            this.context = context;
+            _context = context;
         }
 
         public IEnumerable<InventoryItem> GetAll()
         {
-            return context.InventoryItems.ToList();
+            return _context.InventoryItems.ToList();
         }
 
         public InventoryItem Get(int id)
         {
-            return context.InventoryItems.Find(id);
+            return _context.InventoryItems.Find(id);
         }
 
         public InventoryItem Add(InventoryItem item)
@@ -25,16 +25,16 @@
             {
                 throw new ArgumentNullException("item");
             }
-            context.InventoryItems.Add(item);
+            _context.InventoryItems.Add(item);
             return item;
         }
 
         public void Remove(int id)
         {
-            InventoryItem toRemove = context.InventoryItems.Find(id);
+            InventoryItem toRemove = _context.InventoryItems.Find(id);
             if (toRemove != null)
             {
-                context.InventoryItems.Remove(toRemove);
+                _context.InventoryItems.Remove(toRemove);
             }
         }
 
@@ -44,8 +44,8 @@
             {
                 throw new ArgumentNullException("item");
             }
-            context.InventoryItems.Update(item);
-            context.SaveChanges();
+            _context.InventoryItems.Update(item);
+            _context.SaveChanges();
             return true;
         }
 
